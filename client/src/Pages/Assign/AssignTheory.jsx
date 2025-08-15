@@ -17,7 +17,7 @@ function AssignTheory() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/subjects');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/subjects`);
         setSubjects(response.data.data);
       } catch (error) {
         console.error('Error fetching subjects:', error);
@@ -26,7 +26,7 @@ function AssignTheory() {
 
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/teachers');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/teachers`);
         setTeachers(response.data.data);
       } catch (error) {
         console.error('Error fetching teachers:', error);

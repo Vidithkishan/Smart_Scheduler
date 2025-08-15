@@ -29,7 +29,7 @@ function AddTeachers() {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/teachers");
+      const response = await axios.get(process.env.REACT_APP_API_URL + "/api/teachers");
       setTeachers(response?.data.data);
     } catch (error) {
       toast.error("Error fetching teachers: " + error.message);
@@ -38,7 +38,7 @@ function AddTeachers() {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/subjects");
+      const response = await axios.get(process.env.REACT_APP_API_URL + "/api/subjects");
       setSubjects(response.data.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -55,7 +55,7 @@ function AddTeachers() {
           onClick: async () => {
             try {
               const response = await axios.delete(
-                `http://localhost:5000/api/teachers/${id}`
+                `${process.env.REACT_APP_API_URL}/api/teachers/${id}`
               );
               if (response.status === 200) {
                 toast.success("Teacher deleted successfully");
@@ -84,7 +84,7 @@ function AddTeachers() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/teachers", {
+      const response = await axios.post(process.env.REACT_APP_API_URL + "/api/teachers", {
         teacherName: formData.teacherName,
         teacherID: formData.teacherID,
         designation: formData.designation,

@@ -14,7 +14,7 @@ function AssignClassrooms() {
     useEffect(() => {
         const fetchClassrooms = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/classrooms');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/classrooms`);
                 setClassrooms(response.data.data);
             } catch (error) {
                 console.error('Error fetching classrooms:', error);
@@ -27,7 +27,7 @@ function AssignClassrooms() {
     useEffect(() => {
         const fetchAssignments = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/classroom-assignments');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/classroom-assignments`);
                 setAssignments(response.data.data);
             } catch (error) {
                 console.error('Error fetching classroom assignments:', error);
@@ -47,11 +47,11 @@ function AssignClassrooms() {
                 classroom: selectedClassroom, // Ensure this is the correct field
             };
             console.log('Assignment Data:', assignmentData);
-            await axios.post('http://localhost:5000/api/classroom-assignments', assignmentData);
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/classroom-assignments`, assignmentData);
             toast.success('Classroom assigned successfully');
             
             // Fetch updated assignments after assignment is created
-            const response = await axios.get('http://localhost:5000/api/classroom-assignments');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/classroom-assignments`);
             setAssignments(response.data.data);
         } catch (error) {
             console.error('Error assigning classroom:', error);
@@ -60,11 +60,11 @@ function AssignClassrooms() {
     };
     const handleDelete = async (assignmentId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/classroom-assignments/${assignmentId}`);
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/classroom-assignments/${assignmentId}`);
             toast.success('Assignment deleted successfully');
             
             // Fetch updated assignments after deletion
-            const response = await axios.get('http://localhost:5000/api/classroom-assignments');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/classroom-assignments`);
             setAssignments(response.data.data);
         } catch (error) {
             console.error('Error deleting assignment:', error);

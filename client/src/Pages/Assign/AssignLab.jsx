@@ -17,7 +17,7 @@ function AssignLab() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/subjects');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/subjects`);
         console.log(response.data.data);
         setSubjects(response.data.data);
       } catch (error) {
@@ -27,7 +27,7 @@ function AssignLab() {
 
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/teachers');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/teachers`);
         console.log(response.data.data);
         setTeachers(response.data.data);
       } catch (error) {
@@ -42,7 +42,7 @@ function AssignLab() {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/lab-assignments');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/lab-assignments`);
         console.log(response.data.data, "labs");
         setAssignments(response.data.data);
       } catch (error) {
@@ -55,13 +55,13 @@ function AssignLab() {
 
   const handleAssign = async () => {
     try {
-      await axios.post('http://localhost:5000/api/lab-assignments', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/lab-assignments`, {
         subjectId: selectedSubject,
         teacherId: selectedTeacher,
       });
       console.log('Assignment successful');
       toast.success('Assignment successful');
-      const response = await axios.get('http://localhost:5000/api/lab-assignments');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/lab-assignments`);
       console.log(response.data.data, "labs");
       setAssignments(response.data.data);
     } catch (error) {
@@ -79,7 +79,7 @@ function AssignLab() {
           label: 'Yes',
           onClick: async () => {
             try {
-              await axios.delete(`http://localhost:5000/api/lab-assignments/${AssignmentId}`);
+              await axios.delete(`${process.env.REACT_APP_API_URL}/api/lab-assignments/${AssignmentId}`);
               toast.success('Assignment deleted successfully');
               const updatedAssignments = assignments.filter(assignment => assignment._id !== AssignmentId);
               setAssignments(updatedAssignments);

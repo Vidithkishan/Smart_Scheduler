@@ -33,7 +33,7 @@ function AddSubjects() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/subjects");
+        const response = await axios.get(process.env.REACT_APP_API_URL + "/api/subjects");
         setSubjectData(response?.data?.data);
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -62,7 +62,7 @@ function AddSubjects() {
         }
       }
   
-      const response = await axios.post("http://localhost:5000/api/subjects", formData);
+      const response = await axios.post(process.env.REACT_APP_API_URL + "/api/subjects", formData);
       if (response.status === 201) {
         toast.success("Subject added successfully");
         setRefreshToken(response);
@@ -96,7 +96,7 @@ function AddSubjects() {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await axios.delete(`http://localhost:5000/api/subjects/${id}`);
+              const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/subjects/${id}`);
               if (response.status === 200) {
                 toast.success("Subject deleted successfully");
                 setRefreshToken(response);

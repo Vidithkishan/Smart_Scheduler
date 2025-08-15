@@ -23,7 +23,7 @@ function AddRooms() {
 
   const fetchClassroom = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/classrooms");
+      const response = await axios.get(process.env.REACT_APP_API_URL + "/api/classrooms");
       setClassrooms(response?.data.data);
     } catch (error) {
       toast.error("Error fetching classrooms:", error);
@@ -39,7 +39,7 @@ function AddRooms() {
           label: 'Yes',
           onClick: async () => {
             try {
-              const response = await axios.delete(`http://localhost:5000/api/classrooms/${id}`);
+              const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/classrooms/${id}`);
               if (response.status === 200) {
                 toast.success('Classroom deleted successfully');
                 setRefereshToken(response);
@@ -74,7 +74,7 @@ function AddRooms() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/classrooms', formData);
+      const response = await axios.post(process.env.REACT_APP_API_URL + '/api/classrooms', formData);
       if (response.status === 201) {
         toast.success('Classroom added successfully', { autoClose: 5000 });
         setRefereshToken(response)

@@ -19,8 +19,8 @@ function TimeTableDashboard() {
         const fetchData = async () => {
             try {
                 const [deptRes, semRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/departments'),
-                    axios.get('http://localhost:5000/api/semesters'),
+                    axios.get('process.env.REACT_APP_API_URL/api/departments'),
+                    axios.get('process.env.REACT_APP_API_URL/api/semesters'),
                 ]);
                 setDepartments(deptRes.data);
                 setSemesters(semRes.data);
@@ -39,7 +39,7 @@ function TimeTableDashboard() {
         setError(null);
 
         try {
-            const response = await axios.get('http://localhost:5000/api/timetable', {
+            const response = await axios.get('process.env.REACT_APP_API_URL/api/timetable', {
                 params: { department, semester },
             });
             setTimetable(response.data.data); // Storing the fetched timetable in state
@@ -56,7 +56,7 @@ function TimeTableDashboard() {
         setError(null);
 
         try {
-            await axios.post('http://localhost:5000/api/timetable/generate-all');
+            await axios.post('process.env.REACT_APP_API_URL/api/timetable/generate-all');
             alert('All timetables generated successfully!');
         } catch (err) {
             setError('Failed to generate all timetables');
