@@ -19,7 +19,7 @@ function TimeTableDashboard() {
     const [hours, setHours] = useState({
         theoryHours: 0,
         labHours: 0,
-        electiveHours: 0, // New field for elective hours
+        electiveHours: 0,
     });
 
     useEffect(() => {
@@ -57,13 +57,6 @@ function TimeTableDashboard() {
             if (response.data && response.data.data) {
                 setTimetable(response.data.data);
                 calculateHours(response.data.data);
-
-                response.data.data.slots.forEach((slot, index) => {
-                    console.log(`Slot ${index + 1}:`, slot);
-                    if (slot.subject?.subjectType === 'Elective') {
-                        console.log(`Elective Subject Details:`, slot.subject);
-                    }
-                });
             } else {
                 setError('No timetable available for the selected department and semester.');
                 setTimetable(null);
@@ -107,6 +100,31 @@ function TimeTableDashboard() {
         const [startHour, startMinute] = startTime.split(':').map(Number);
         const [endHour, endMinute] = endTime.split(':').map(Number);
         return (endHour + endMinute / 60) - (startHour + startMinute / 60);
+    };
+
+    // Convert hours table data to CSV format
+    const downloadCSV = () => {
+        const rows = [
+            ["Particulars", "Units"],
+            ["Theory", `${hours.theoryHours.toFixed(2)} hrs`],
+            ["Laboratory", `${hours.labHours.toFixed(2)} hrs`],
+            ["Elective", `${hours.electiveHours.toFixed(2)} hrs`],
+            ["Total", `${(hours.theoryHours + hours.labHours + hours.electiveHours).toFixed(2)} hrs`],
+        ];
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        rows.forEach((rowArray) => {
+            let row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+
+        // Create a link element and trigger a download
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "timetable_data.csv");
+        document.body.appendChild(link);
+        link.click();
     };
 
     return (
@@ -186,6 +204,10 @@ function TimeTableDashboard() {
                         <div className="dashboard-btn-container">
                             <button onClick={toPDF} className="dashboard-download-btn">
                                 Download PDF
+                            </button>
+                            {/* Download Data button */}
+                            <button onClick={downloadCSV} className="dashboard-download-btn">
+                                Download Data
                             </button>
                         </div>
 
