@@ -18,8 +18,8 @@ function TimeTableDashboard() {
         const fetchData = async () => {
             try {
                 const [deptRes, semRes] = await Promise.all([
-                    axios.get('process.env.REACT_APP_API_URL/api/departments'),
-                    axios.get('process.env.REACT_APP_API_URL/api/semesters'),
+                    axios.get('/api/departments'),
+                    axios.get('/api/semesters'),
                 ]);
                 setDepartments(deptRes.data);
                 setSemesters(semRes.data);
@@ -38,7 +38,7 @@ function TimeTableDashboard() {
         setError(null);
 
         try {
-            const response = await axios.get('process.env.REACT_APP_API_URL/api/timetable', {
+            const response = await axios.get('/api/timetable', {
                 params: { department, semester },
             });
             setTimetable(response.data.data);

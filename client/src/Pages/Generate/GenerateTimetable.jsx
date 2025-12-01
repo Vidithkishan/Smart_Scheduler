@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { usePDF } from 'react-to-pdf';
-import TimeTable from './TimeTable'; // Ensure this is a default import
-import './TimeTableDashboard.css'; // Import the updated CSS
+import TimeTable from './TimeTable';
+import './TimeTableDashboard.css';
 
 function TimeTableDashboard() {
     const [departments, setDepartments] = useState([]);
@@ -12,15 +12,15 @@ function TimeTableDashboard() {
     const [timetable, setTimetable] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [generatingTimetable, setGeneratingTimetable] = useState(false); // New state for generating timetable
+    const [generatingTimetable, setGeneratingTimetable] = useState(false);
     const { toPDF, targetRef } = usePDF({ filename: 'timetable.pdf' });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [deptRes, semRes] = await Promise.all([
-                    axios.get('process.env.REACT_APP_API_URL/api/departments'),
-                    axios.get('process.env.REACT_APP_API_URL/api/semesters'),
+                    axios.get(`${process.env.REACT_APP_API_URL}/api/departments`),
+                    axios.get(`${process.env.REACT_APP_API_URL}/api/semesters`),
                 ]);
                 setDepartments(deptRes.data);
                 setSemesters(semRes.data);
@@ -39,29 +39,30 @@ function TimeTableDashboard() {
         setError(null);
 
         try {
-            const response = await axios.get('process.env.REACT_APP_API_URL/api/timetable', {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/timetable`, {
                 params: { department, semester },
             });
-            setTimetable(response.data.data); // Storing the fetched timetable in state
+            setTimetable(response.data.data);
         } catch (err) {
             setError('Failed to fetch timetable');
-            setTimetable(null); // Reset timetable in case of error
+            setTimetable(null);
         } finally {
             setLoading(false);
         }
     };
 
     const generateAllTimetables = async () => {
-        setGeneratingTimetable(true); // Start generating timetable
+        setGeneratingTimetable(true);
         setError(null);
 
         try {
-            await axios.post('process.env.REACT_APP_API_URL/api/timetable/generate-all');
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/timetable/generate-all`);
             alert('All timetables generated successfully!');
         } catch (err) {
-            setError('Failed to generate all timetables');
+            const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
+            setError(serverMsg || 'Failed to generate all timetables');
         } finally {
-            setGeneratingTimetable(false); // Finished generating timetable
+            setGeneratingTimetable(false);
         }
     };
 
@@ -154,7 +155,6 @@ function TimeTableDashboard() {
                             </button>
                         </div>
                         <div ref={targetRef}>
-                            {/* Displaying the timetable in TimeTable component */}
                             <TimeTable data={timetable} />
                         </div>
                     </div>
